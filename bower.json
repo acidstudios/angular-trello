@@ -1,0 +1,30 @@
+{
+  "name": "angular-trello",
+  "version": "0.0.1",
+  "authors": [
+    "Gustavo Barrientos <gustavo.barrientos@acidstudios.me>"
+  ],
+  "description": "Angular Trello Provider",
+  "main": "dist/angular-trello.min.js",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "angular",
+    "trello",
+    "provider"
+  ],
+  "license": "MIT",
+  "homepage": "http://acidstudios.github.io/angular-trello",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.3.10",
+    "jquery": "~2.1.3"
+  }
+}
