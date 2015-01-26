@@ -57,12 +57,23 @@ module.exports = function(grunt) {
 				port: 9000,
 				path: '/test/dom'
 			}
-		}
+		},
+        karma: {
+            unit: {
+                configFile: 'karma.conf.js'
+            },
+            ci: {
+                config: 'karma.conf.js',
+                singleRun: true,
+                browsers: ['PhantomJS']
+            }
+        }
 	});
 
 	grunt.loadNpmTasks('grunt-serve');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-karma');
 
-	grunt.registerTask('default', ['jshint', 'uglify:dist', 'uglify:src']);
+    grunt.registerTask('default', ['jshint', 'uglify:dist', 'uglify:src']);
 };
