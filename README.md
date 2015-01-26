@@ -1,4 +1,4 @@
-angular-trelo
+angular-trello
 ==================
 
 [![Build Status](https://travis-ci.org/acidstudios/angular-trello.png)](https://travis-ci.org/acidstudios/angular-trello) 
