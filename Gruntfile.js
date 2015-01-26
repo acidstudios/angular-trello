@@ -63,17 +63,18 @@ module.exports = function(grunt) {
                 configFile: 'karma.conf.js'
             },
             ci: {
-                config: 'karma.conf.js',
+                configFile: 'karma.conf.js',
                 singleRun: true,
                 browsers: ['PhantomJS']
             }
         }
 	});
 
+    grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-serve');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-karma');
+
 
     grunt.registerTask('default', ['jshint', 'uglify:dist', 'uglify:src']);
 };
