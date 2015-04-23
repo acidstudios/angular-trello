@@ -3,7 +3,7 @@ var options = {};
 /**
 * angular-trello Module
 *
-* 
+*
 */
 angular.module('trello', []).
 provider('TrelloApi', [function () {
@@ -41,7 +41,7 @@ provider('TrelloApi', [function () {
 		return options.scopes;
 	};
 
-	options.AppName = null; 
+	options.AppName = null;
 	this.SetAppName = function (appname) {
 		options.AppName = appname;
 		return this;
@@ -55,18 +55,17 @@ provider('TrelloApi', [function () {
 	this.SetExpiration = function (duration){
 		options.expiration = duration;
 		return this;
-	}
+	};
 
 	this.GetExpiration = function() {
 		return options.expiration;
-	}
+	};
 
 	this.$get = ['$q', '$rootScope', '$timeout', function ($q, $rootScope, $timeout) {
-		var deferred;
 		var NTrello = function () {};
 
 		var collectionQuery = function(prop, id, params){
-			deferred = $q.defer();
+			var deferred = $q.defer();
 			Trello[prop].get(id, params, function(response){
 				deferred.resolve(response);
 			}, function(err){
@@ -76,7 +75,7 @@ provider('TrelloApi', [function () {
 		};
 
 		NTrello.prototype.Authenticate = function() {
-			deferred = $q.defer();
+			var deferred = $q.defer();
 			Trello.authorize({
 				type: 'popup',
 				name: options.AppName,
@@ -93,7 +92,7 @@ provider('TrelloApi', [function () {
 		};
 
 		NTrello.prototype.Rest = function(method, path, params) {
-			deferred = $q.defer();
+			var deferred = $q.defer();
 			Trello.rest(method, path, params, function(response){
 				deferred.resolve(response);
 			}, function(error){
