@@ -1,126 +1,84 @@
-/*! angular-trello 2015-04-23 */
-var options = {};
-
+/*! angular-trello 2015-04-27 */
 /**
 * angular-trello Module
 *
 *
 */
-angular.module("trello", []).provider("TrelloApi", [ function() {
-    options.key = null;
-    this.SetKey = function(a) {
-        options.key = a;
-        return this;
+(function(a) {
+    var b = {
+        key: null,
+        type: "popup",
+        name: null,
+        persist: true,
+        interactive: true,
+        scope: {
+            read: true,
+            write: false,
+            account: false
+        },
+        expiration: "never"
     };
-    this.GetKey = function() {
-        return options.key;
-    };
-    options.secret = null;
-    this.SetSecret = function(a) {
-        options.secret = a;
-        return this;
-    };
-    this.GetSecret = function() {
-        return options.secret;
-    };
-    this.init = function(a) {
-        angular.extend(options, a);
-    };
-    options.scopes = {
-        read: true,
-        write: false,
-        account: false
-    };
-    this.SetScopes = function(a) {
-        options.scopes = a;
-        return this;
-    };
-    this.GetScopes = function() {
-        return options.scopes;
-    };
-    options.AppName = null;
-    this.SetAppName = function(a) {
-        options.AppName = a;
-        return this;
-    };
-    this.GetAppName = function() {
-        return options.AppName;
-    };
-    options.expiration = "never";
-    this.SetExpiration = function(a) {
-        options.expiration = a;
-        return this;
-    };
-    this.GetExpiration = function() {
-        return options.expiration;
-    };
-    this.$get = [ "$q", "$rootScope", "$timeout", function(a, b, c) {
-        var d = function() {};
-        var e = function(b, c, d) {
-            var e = a.defer();
-            Trello[b].get(c, d, function(a) {
-                e.resolve(a);
-            }, function(a) {
-                e.reject(a);
-            });
-            return e.promise;
+    angular.module("trello", []).provider("TrelloApi", [ function() {
+        this.init = function(a) {
+            angular.extend(b, a);
         };
-        d.prototype.Authenticate = function() {
-            var b = a.defer();
-            Trello.authorize({
-                type: "popup",
-                name: options.AppName,
-                scope: options.scopes,
-                expiration: options.expiration,
-                success: function() {
-                    b.resolve();
-                },
-                error: function() {
-                    b.reject();
-                }
-            });
-            return b.promise;
-        };
-        d.prototype.Rest = function(b, c, d) {
-            var e = a.defer();
-            Trello.rest(b, c, d, function(a) {
-                e.resolve(a);
-            }, function(a) {
-                e.reject(a);
-            });
-            return e.promise;
-        };
-        d.prototype.Token = function() {
-            return Trello.token();
-        };
-        d.prototype.actions = function(a, b) {
-            return e("actions", a, b);
-        };
-        d.prototype.boards = function(a, b) {
-            return e("boards", a, b);
-        };
-        d.prototype.cards = function(a, b) {
-            return e("cards", a, b);
-        };
-        d.prototype.checklists = function(a, b) {
-            return e("checklists", a, b);
-        };
-        d.prototype.lists = function(a, b) {
-            return e("lists", a, b);
-        };
-        d.prototype.members = function(a, b) {
-            return e("members", a, b);
-        };
-        d.prototype.organizations = function(a, b) {
-            return e("organizations", a, b);
-        };
-        return new d();
-    } ];
-} ]).run([ function() {
-    var a = document.createElement("script");
-    a.type = "text/javascript";
-    a.async = true;
-    a.src = "https://api.trello.com/1/client.js?key=" + options.key;
-    var b = document.getElementsByTagName("script")[0];
-    b.parentNode.insertBefore(a, b);
-} ]);
+        this.$get = [ "$q", "$rootScope", "$timeout", function(c, d, e) {
+            var f = function() {};
+            var g = function(b, d, e) {
+                var f = c.defer();
+                a[b].get(d, e, function(a) {
+                    f.resolve(a);
+                }, function(a) {
+                    f.reject(a);
+                });
+                return f.promise;
+            };
+            f.prototype.Authenticate = function() {
+                var d = c.defer();
+                a.authorize(angular.extend(b, {
+                    success: function() {
+                        d.resolve();
+                    },
+                    error: function() {
+                        d.reject();
+                    }
+                }));
+                return d.promise;
+            };
+            f.prototype.Rest = function(b, d, e) {
+                var f = c.defer();
+                a.rest(b, d, e, function(a) {
+                    f.resolve(a);
+                }, function(a) {
+                    f.reject(a);
+                });
+                return f.promise;
+            };
+            f.prototype.Token = function() {
+                return a.token();
+            };
+            f.prototype.actions = function(a, b) {
+                return g("actions", a, b);
+            };
+            f.prototype.boards = function(a, b) {
+                return g("boards", a, b);
+            };
+            f.prototype.cards = function(a, b) {
+                return g("cards", a, b);
+            };
+            f.prototype.checklists = function(a, b) {
+                return g("checklists", a, b);
+            };
+            f.prototype.lists = function(a, b) {
+                return g("lists", a, b);
+            };
+            f.prototype.members = function(a, b) {
+                return g("members", a, b);
+            };
+            f.prototype.organizations = function(a, b) {
+                return g("organizations", a, b);
+            };
+            return new f();
+        } ];
+    } ]);
+})(Trello);
