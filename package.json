@@ -2,7 +2,7 @@
   "name": "angular-trello",
   "version": "0.0.1",
   "description": "Angular Trello Api Provider",
-  "main": "Gruntfile.js",
+  "main": "./dist/angular-trello.js",
   "directories": {
     "test": "test"
   },
