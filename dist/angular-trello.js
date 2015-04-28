@@ -1,4 +1,4 @@
-/*! angular-trello 2015-04-27 */
+/*! angular-trello 2015-04-28 */
 /**
 * angular-trello Module
 *
@@ -19,8 +19,12 @@
         expiration: "never"
     };
     angular.module("trello", []).provider("TrelloApi", [ function() {
-        this.init = function(a) {
-            angular.extend(b, a);
+        this.init = function(c) {
+            if (!a.key() && !c.key) {
+                throw new Error("You must specify your trello app key");
+            }
+            a.setKey(c.key);
+            angular.extend(b, c);
         };
         this.$get = [ "$q", "$rootScope", "$timeout", function(c, d, e) {
             var f = function() {};
@@ -33,17 +37,25 @@
                 });
                 return f.promise;
             };
-            f.prototype.Authenticate = function() {
-                var d = c.defer();
-                a.authorize(angular.extend(b, {
+            f.prototype.Authenticated = function() {
+                return a.authorized();
+            };
+            f.prototype.Authenticate = function(d) {
+                d = d || {};
+                var e = c.defer();
+                var f = angular.copy(b);
+                if (d.interactive) {
+                    f.interactive = true;
+                }
+                a.authorize(angular.extend(f, {
                     success: function() {
-                        d.resolve();
+                        e.resolve();
                     },
                     error: function() {
-                        d.reject();
+                        e.reject();
                     }
                 }));
-                return d.promise;
+                return e.promise;
             };
             f.prototype.Rest = function(b, d, e) {
                 var f = c.defer();
