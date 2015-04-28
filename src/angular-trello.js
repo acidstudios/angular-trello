@@ -17,6 +17,10 @@
 	angular.module('trello', []).
 	provider('TrelloApi', [function () {
 		this.init = function (custom) {
+			if (!Trello.key() && !custom.key) {
+				throw new Error('You must specify your trello app key');
+			}
+			Trello.setKey(custom.key);
 			angular.extend(options, custom);
 		};
 
