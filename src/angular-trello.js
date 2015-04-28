@@ -37,9 +37,19 @@
 				return deferred.promise;
 			};
 
-			NTrello.prototype.Authenticate = function() {
+			NTrello.prototype.Authenticated = function() {
+				return Trello.authorized();
+			};
+
+			NTrello.prototype.Authenticate = function(custom) {
+				custom = custom || {};
+
 				var deferred = $q.defer();
-				Trello.authorize(angular.extend(options, {
+				var params = angular.copy(options);
+				if (custom.interactive) {
+					params.interactive = true;
+				}
+				Trello.authorize(angular.extend(params, {
 					success :function () {
 						deferred.resolve();
 					},
