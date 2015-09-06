@@ -3,7 +3,6 @@
 *
 *
 */
-(function (Trello) {
 	var options = {
 		key: null,
 		type: 'popup',
@@ -17,10 +16,9 @@
 	angular.module('trello', []).
 	provider('TrelloApi', [function () {
 		this.init = function (custom) {
-			if (!Trello.key() && !custom.key) {
+			if (!custom.key) {
 				throw new Error('You must specify your trello app key');
 			}
-			Trello.setKey(custom.key);
 			angular.extend(options, custom);
 		};
 
@@ -104,5 +102,11 @@
 
 			return new NTrello();
 		}];
+	}]).run([function(){
+		var script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.async = true;
+		script.src = 'https://api.trello.com/1/client.js?key=' + options.key;
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(script, s);
 	}]);
-})(Trello);
