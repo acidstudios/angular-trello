@@ -1,4 +1,4 @@
-/*! angular-trello 2015-09-06 */
+/*! angular-trello 2015-12-07 */
 /**
 * angular-trello Module
 *
@@ -20,10 +20,9 @@ var options = {
 
 angular.module("trello", []).provider("TrelloApi", [ function() {
     this.init = function(a) {
-        if (!Trello.key() && !a.key) {
+        if (!a.key) {
             throw new Error("You must specify your trello app key");
         }
-        Trello.setKey(a.key);
         angular.extend(options, a);
     };
     this.$get = [ "$q", "$rootScope", "$timeout", function(a, b, c) {
