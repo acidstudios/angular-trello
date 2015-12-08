@@ -1,4 +1,4 @@
-/*! angular-trello 2015-12-07 */
+/*! angular-trello 2015-12-08 */
 /**
 * angular-trello Module
 *
@@ -97,5 +97,5 @@ angular.module("trello", []).provider("TrelloApi", [ function() {
     a.async = true;
     a.src = "https://api.trello.com/1/client.js?key=" + options.key;
     var b = document.getElementsByTagName("script")[0];
-    b.parentNode.insertBefore(a, b);
+    b && b.parentNode.insertBefore(a, b);
 } ]);
