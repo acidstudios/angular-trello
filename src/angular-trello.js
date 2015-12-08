@@ -108,5 +108,5 @@
 		script.async = true;
 		script.src = 'https://api.trello.com/1/client.js?key=' + options.key;
 		var s = document.getElementsByTagName('script')[0];
-		s.parentNode.insertBefore(script, s);
+		s && s.parentNode.insertBefore(script, s);
 	}]);
