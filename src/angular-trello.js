@@ -99,6 +99,20 @@
 			NTrello.prototype.organizations = function(id, params) {
 				return collectionQuery("organizations", id, params);
 			};
+			
+			NTrello.prototype.addCard = function(params){
+				var defered = $q.defer();
+				if(typeof params === 'string') {
+					Trello.addCard({url: params});
+					defered.resolve({response: 'OK'});
+				} else if(typeof params === 'object') {
+					Trello.addCard(params);
+					defered.resolve({response: 'OK'});
+				} else {
+					defered.reject({error: 1, response: 'Type must be string or object.'});
+				}
+				return defered.promise;
+			}
 
 			return new NTrello();
 		}];

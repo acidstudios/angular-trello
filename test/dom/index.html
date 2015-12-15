@@ -16,7 +16,6 @@
 
         <script>
         	var app = angular.module('providertest', ['trello']);
-
         	app.config(['TrelloApiProvider',function(TrelloApiProvider) {
         		TrelloApiProvider.init({
         			key: 'YOUR_KEY',
@@ -24,8 +23,16 @@
         			scopes: {read: true, write: true, account: true},
         			AppName: 'Prueba Angular Trello'
         		});
-        	}]).controller('TestCtrl', ['$scope', 'TrelloApi', function($scope, TrelloApi){
+        	}]).run(function($rootScope){
+                $rootScope.keys = Object.keys;
+            }).controller('TestCtrl', ['$scope', 'TrelloApi', function($scope, TrelloApi){
         		$scope.boards = [];
+                $scope.profile = {};
+                $scope.cardUrl = '';
+                $scope.User = '';
+                $scope.board = {};
+                $scope.searchedBoards = [];
+                
         		$scope.test = function () {
         			TrelloApi.Authenticate().then(function(){
         				alert(TrelloApi.Token());
@@ -35,21 +42,38 @@
         		};
 
         		$scope.getMe = function () {
-        			TrelloApi.Rest('GET', 'members/me').then(function(res){
-        				$scope.boards = res.idBoards;
-        				alert(res);
+        			TrelloApi.Rest('GET', 'members/me', {boards: 'all'}).then(function(res){
+                        $scope.profile = res;
         			}, function(err){
         				alert(err);
         			});
         		};
 
         		$scope.getBoards = function() {
-        			TrelloApi.boards($scope.boards[0], {}).then(function(res) {
-        				alert(res);
+                    var apiCall = 'members/' + $scope.User + '/boards'
+                    TrelloApi.Rest('get', apiCall).then(function(response) {
+                        $scope.searchedBoards = response;
+                    }, function(err) {
+                        alert(err);
+                    });
+        		};
+                
+                $scope.addCard = function(){
+                    TrelloApi.addCard($scope.cardUrl).then(function(res) {
+                        $scope.cardUrl = '';
+                    }, function(err) {
+                    });
+                };
+                
+                $scope.boardDetails = function(board) {
+                    TrelloApi.boards(board, {}).then(function(res) {
+        				$scope.board = res;
         			}, function(err) {
         				alert(err);
         			});
-        		};
+                }
+                
+                
         	}]);
         </script>
     </head>
@@ -57,6 +81,74 @@
     	<h1>Test Trello API</h1>
     	<button ng-click="test()">Authorize Trello</button>
     	<button ng-click="getMe()">Get My Info in Trello</button>
-    	<button ng-click="getBoards()">Get My Boards in Trello</button>
+
+        <div ng-show="keys(profile).length > 0">
+            <h1>My Info</h1>
+            <img src="http://www.gravatar.com/avatar/{{ profile.gravatarHash }}=200" />
+            <p>Name: {{profile.fullName}}</p>
+            <p># of Boards: {{ profile.idBoards.length }}</p>
+            <table>
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Organization</td>
+                        <td>Board</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="board in profile.boards">
+                        <td>{{ board.id }}</td>
+                        <td>{{ board.idOrganization }}</td>
+                        <td><a ng-click="boardDetails(board.id)">{{ board.name }}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+            <h1 ng-show="keys(board).length > 0">{{ board.name }} Details</h1>
+            <table ng-show="keys(board).length > 0">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Background</td>
+                        <td># Labels</td>
+                        <td>Link</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ board.name }}</td>
+                        <td>{{ board.prefs.background }}</td>
+                        <td>{{ board.labelNames.length }}</td>
+                        <td><a href="{{ board.url }}">{{ board.url }}</a> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            Boards for User: <input type="text" ng-model="User"></input><button ng-click="getBoards()">Search</button>
+            <table ng-show="searchedBoards.length > 0">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Board</td>
+                        <td>Last View</td>
+                        <td>Last Activity</td>
+                        <td>URL</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="board in searchedBoards">
+                        <td>{{ board.id }}</td>
+                        <td><a ng-click="boardDetails(board.id)">{{ board.name }}</a></td>
+                        <td>{{ board.dateLastView }}</td>
+                        <td>{{ board.dateLastActivity }}</td>
+                        <td><a href="{{ board.url }}">{{ board.shortUrl }}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <h1>Add Card</h1>
+            Name:<input type="text" ng-model="cardUrl"><button ng-click="addCard()">Add Card</button>
+        </div>
     </body>
 </html>
