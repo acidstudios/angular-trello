@@ -21,8 +21,8 @@ var app = angular.module('providertest', ['trello']);
         		TrelloApiProvider.init({
         			key: 'YOUR_KEY',
         			secret: 'YOUR_SECRET',
-        			scopes: {read: true, write: true, account: true},
-        			AppName: 'Angular-Trello Test'
+        			scope: {read: true, write: true, account: true},
+        			name: 'Angular-Trello Test'
         		});
         	}]);
 
